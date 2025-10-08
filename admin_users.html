@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление пользователями - Админ-панель</title>
+    <link rel="shortcut icon" href="assets/media/images/logo/logo.svg" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="admin-container container">
+        <!-- Сайдбар -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <h1>Гончарная студия</h1>
+                <p>Админ-панель</p>
+            </div>
+            <ul class="admin-nav-menu">
+                <li class="admin-nav-item">
+                    <a href="admin_users.html" class="admin-nav-link active">Пользователи</a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="admin_products.html" class="admin-nav-link">Товары</a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="admin_categories.html" class="admin-nav-link">Категории</a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="admin_orders.html" class="admin-nav-link">Заказы</a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Основной контент -->
+        <main class="admin-main-content">
+            <div class="admin-header">
+                <h2 class="admin-page-title">Управление пользователями</h2>
+                <a href="?exit">Выйти</a>
+            </div>
+            
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Иванов Алексей</td>
+                            <td>alex@example.com</td>
+                            <td>+7 (900) 123-45-67</td>
+                            <td><span class="admin-status-badge admin-status-new">Активен</span></td>
+                            <td>
+                                <button class="admin-btn admin-btn-danger">Заблокировать</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Петрова Мария</td>
+                            <td>maria@example.com</td>
+                            <td>+7 (900) 765-43-21</td>
+                            <td><span class="admin-status-badge admin-status-cancelled">Заблокирован</span></td>
+                            <td>
+                                <button class="admin-btn admin-btn-danger">Разблокировать</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Сидоров Петр</td>
+                            <td>petr@example.com</td>
+                            <td>+7 (900) 987-65-43</td>
+                            <td><span class="admin-status-badge admin-status-new">Активен</span></td>
+                            <td>
+                                <button class="admin-btn admin-btn-danger">Заблокировать</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Козлова Анна</td>
+                            <td>anna@example.com</td>
+                            <td>+7 (900) 555-12-34</td>
+                            <td><span class="admin-status-badge admin-status-new">Активен</span></td>
+                            <td>
+                                <button class="admin-btn admin-btn-danger">Заблокировать</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Модальное окно добавления/редактирования пользователя -->
+    <div class="admin-modal" id="userModal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Добавить пользователя</h3>
+                <button class="admin-close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="admin-form-container">
+                <div class="admin-form-group">
+                    <label for="userName">Имя:</label>
+                    <input type="text" id="userName" name="name" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" id="userEmail" name="email" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="userPhone">Телефон:</label>
+                    <input type="tel" id="userPhone" name="phone">
+                </div>
+                <div class="admin-form-group">
+                    <label for="userStatus">Статус:</label>
+                    <select id="userStatus" name="status">
+                        <option value="active">Активен</option>
+                        <option value="blocked">Заблокирован</option>
+                    </select>
+                </div>
+                <div class="admin-form-actions">
+                    <button class="admin-btn admin-btn-secondary" onclick="closeModal()">Отмена</button>
+                    <button class="admin-btn admin-btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById('userModal').classList.remove('active');
+        }
+
+        function openModal() {
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        // Закрытие модального окна при клике вне его
+        document.getElementById('userModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
+
+

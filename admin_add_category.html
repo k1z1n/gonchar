@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить категорию - Админ-панель</title>
+    <link rel="shortcut icon" href="assets/media/images/logo/logo.svg" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="admin-container container">
+        <!-- Сайдбар -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <h1>Гончарная студия</h1>
+                <p>Админ-панель</p>
+            </div>
+            <ul class="admin-nav-menu">
+                <li class="admin-nav-item">
+                    <a href="admin_users.html" class="admin-nav-link">Пользователи</a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="admin_products.html" class="admin-nav-link">Товары</a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="admin_categories.html" class="admin-nav-link active">Категории</a>
+                </li>
+                <li class="admin-nav-item">
+                    <a href="admin_orders.html" class="admin-nav-link">Заказы</a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Основной контент -->
+        <main class="admin-main-content">
+            <div class="admin-header">
+                <h2 class="admin-page-title">Добавить категорию</h2>
+                <a href="?exit">Выйти</a>
+            </div>
+            
+            <div class="admin-form-container">
+                <form id="categoryForm">
+                    <div class="admin-form-group">
+                        <label for="categoryName">Название категории</label>
+                        <input type="text" id="categoryName" required>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="categoryDescription">Описание</label>
+                        <textarea id="categoryDescription"></textarea>
+                    </div>
+                    <div class="admin-form-actions">
+                        <button type="button" class="admin-btn admin-btn-secondary" id="cancelCategoryBtn">Отмена</button>
+                        <button type="submit" class="admin-btn admin-btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Обработка формы категории
+        document.getElementById('categoryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Категория добавлена!');
+            // Перенаправляем обратно на страницу управления категориями
+            window.location.href = 'admin_categories.html';
+        });
+
+        // Кнопка отмены
+        document.getElementById('cancelCategoryBtn').addEventListener('click', function() {
+            window.location.href = 'admin_categories.html';
+        });
+    </script>
+</body>
+</html>
+

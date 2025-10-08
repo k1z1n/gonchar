@@ -1,0 +1,18 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<mask id="mask0_50_37" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+<rect width="20" height="20" fill="url(#pattern0_50_37)"/>
+</mask>
+<g mask="url(#mask0_50_37)">
+<rect width="20" height="20" fill="url(#pattern1_50_37)"/>
+<rect width="20" height="20" fill="#6E1A00"/>
+</g>
+<defs>
+<pattern id="pattern0_50_37" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_50_37" transform="scale(0.00195312)"/>
+</pattern>
+<pattern id="pattern1_50_37" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_50_37" transform="scale(0.00195312)"/>
+</pattern>
+<image id="image0_50_37" width="512" height="512" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIAAgMAAACJFjxpAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAABvKAAAbygEeqZAXAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAAlQTFRF////AAAAAAAAflGpXQAAAAJ0Uk5TAICbK04YAAAEbElEQVR42u3aya0jMQyEYerCIBTNi+dFoyB40UQ5F8Pw0osWkgXM1B9BHT64uyWLMMYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhj7L/v9w+0LhU7wESxA5oU7IAfMIIugkVgIlgETQSL4Af8S9BFsAhMBIugiWAR/IAfB/3xPKpYAkAE7TGggAnAEPTnS0nFEoAhaM8BBUwAhKC/vJlWLAEQgvYyoIAJQBD0t8+TiiUAQdDeBhQwAQCC/vGNWrEEAAjax4ACJpCOoH8dVFQsgXQE7WtAARNIRtAPTqsqlkAygnYwoIAJpCLoh0eWFUsgFUE7HFDABBIR9JNz64olkIignQwoYAJpCPrp5UXFEkhD0E4HFDCBJAT94garYgkkIWgXAwqYQAqCfnmNWbEEUhC0ywEFTCABQb+5y65YAgkI2s2AAiYQjqDf/qGhYgmEI2i3AwqYQDCCewLBCGxggGIJBCMYIBCKYIRAKAIbGqBYAqEIhggEIhgjEIjABgcolkAggkECYQhGCYQhsOEBiiUQhmCYQBCCcQJBCGxigGIJBCGYIBCCYIZACAKbGqBYAiEIpggEIJgjEIDAJgcolkAAgkkC7ghmCbgjsOkBiiXgjmCagDOCeQLOCGxhgGIJOCNYIOCKYIWAKwJbGqBYAq4Ilgg4Ilgj4IjAFgcoloAjgkUCbghWCbghsOUBiiXghmCZgBOCdQJOCGxjgGIJOCHYIOCCYIeACwLbGqBYAi4Itgg4INgj4IDANgcoloADgk0C2wh2CWwjsO0BiiWwjWCbwCaCfQKbCMxhgGIJbCJwILCFwIPAFgJzGaBYAlsIXAhsIPAhsIHAnAYolsAGAicCywi8CCwjMLcBiiWwjMCNwCICPwKLCMxxgGIJLCJwJLCEwJPAEgJzHaBYAksIXAksIPAlsIDAnAcolsACAmcC0wi8CUwjMPcBiiUwjcCdwCQCfwKTCCxggGIJTCIIIDCFIILAFAILGaBYAlMIQghMIIghMIHAggYolsAEgiACwwiiCAwjsLABiiUwjCCMwCCCOAKDCCxwgGIJDCIIJDCEIJLAEAILHaBYAkMIQgkMIIglMIDAggcolsAAgmACtwiiCdwisPABiiVwiyCcwA2CeAI3CCxhgGIJ3CBIIHCJIIPAJQJLGaBYApcIUghcIMghcIHAkgYolsAFgiQCpwiyCJwisLQBiiVwiiCNwAmCPAInCCxxgGIJnCBIJHCIIJPAIQJLHaBYAocIUgkcIMglcIDAkgcolsABgmQCXwiyCXwhsPQBiiXwhSCdwAeCfAIfCAwwQLEEPhAACLwhQBB4Q2CQAYol8IYAQuAFAYbACwIDDVAsgRcEIAJPBCgCTwQGG6BYAk8EMAIPBDgCDwQGHKBYAg8EQAIiv1gCIhVLQESxBEQKmIDIL5aASDXwAG3gAQVMgDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY/9AfwFl5IJ3vCCsmQAAAABJRU5ErkJggg=="/>
+</defs>
+</svg>
