@@ -15,10 +15,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if(empty($surname) || empty($username)) {
         $errors[] = 'Заполните пустые поля';
-    } elseif (!is_numeric($phone)) {
-        $errors[] = 'Телефон введен некорректно';
     }
 
+    if(empty($errors)) {
+        $sql = "UPDATE users SET surname = ?, username = ?, patronymic = ?, phone = ? WHERE id = ?";
+        $stmt = $database->prepare($sql);
+        $stmt->execute([$surname, $username, $patronymic, $phone, $_SESSION['user_id']]);
+        header('Location: ./?page=profile');
+    }
 
 }
 
@@ -39,13 +43,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         <!-- PROFILE FORM START -->
-        <form action="" class="avtoreg_form container" method="post">
+        <form class="avtoreg_form container" method="post">
             <input type="text" placeholder="Фамилия*" name="surname" value="<?=$user['surname'] ?? '' ?>">
             <input type="text" placeholder="Имя*" name="username" value="<?=$user['username'] ?? '' ?>">
             <input type="text" placeholder="Отчество" name="patronymic" value="<?=$user['patronymic'] ?? '' ?>">
             <input type="tel" placeholder="Телефон" name="phone" value="<?=$user['phone'] ?? '' ?>">
             <input type="email" placeholder="E-mail*" disabled value="<?=$user['email'] ?? '' ?>">
-            <button class="btn_bg">СОХРНАИТЬ ИЗМЕНЕНИЯ</button>
+            <a href="?exit">Выйти из аккаунта</a>
+            <div>
+                <?php if (!empty($errors)): ?>
+                    <?php foreach ($errors as $error): ?>
+                        <p><?= $error ?></p>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+            <button class="btn_bg">СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
         </form>
 
         <!-- PROFILE FORM END -->

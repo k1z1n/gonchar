@@ -16,12 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $database->prepare($sql);
     $stmt->execute([$email]);
     $user = $stmt->fetch(2);
+    var_dump($user);
 
     if (!$user || !password_verify($password, $user["password"])) {
         $errors[] = "Неверный логин или пароль";
     } elseif (empty($errors)) {
         $_SESSION['user_id'] = $user['id'];
-        header('Location: ./?page=profile');
+        if($user['role'] == 'admin'){
+            header("Location: ./?page=admin_users");
+        } else {
+            header('Location: ./?page=profile');
+        }
     }
 }
 

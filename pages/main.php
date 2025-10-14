@@ -1,5 +1,5 @@
 <!-- BANNER START -->
-<section class="banner container mt-105">
+<section id="about" class="banner container mt-105">
     <!-- Фоновые изображения -->
     <div class="banner_images">
         <div class="hero_image_left">
@@ -22,7 +22,7 @@
 </section>
 <!-- BANNER END -->
 
-<div class="h2_title container mt-105">
+<div id="masterclasses" class="h2_title container mt-105">
     <h2>Мастер классы</h2>
     <hr>
 </div>
@@ -82,7 +82,7 @@
 </div>
 <!-- MASTERKLASS END -->
 
-<div class="h2_title container mt-105">
+<div id="catalog" class="h2_title container mt-105">
     <h2>Популярные товары</h2>
     <hr>
 </div>
@@ -115,7 +115,7 @@
 </div>
 <!-- POPULAR PRODUCTS END -->
 
-<div class="h2_title container mt-105">
+<div id="studio" class="h2_title container mt-105">
     <h2>Наша студия</h2>
     <hr>
 </div>
@@ -137,7 +137,7 @@
 </div>
 <!-- STUDIO SECTION END -->
 
-<div class="h2_title container mt-105">
+<div id="faq" class="h2_title container mt-105">
     <h2>FAQ - часто задаваемые вопросы</h2>
     <hr>
 </div>

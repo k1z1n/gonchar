@@ -23,7 +23,7 @@ include_once("includes/head.php");
 
     include("includes/header.php");
 
-    $allPages = ['main', 'register', 'login', 'profile'];
+    $allPages = ['main', 'register', 'login', 'profile', 'admin_users', 'admin_products'];
 
     $page = $_GET['page'] ?? 'main';
 
