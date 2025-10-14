@@ -7,7 +7,7 @@
 <div class="admin-container container">
 
     <?php include('./includes/admin_menu.php'); ?>
-    тест
+
     <!-- Основной контент -->
     <main class="admin-main-content">
         <div class="admin-header">
