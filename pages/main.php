@@ -110,7 +110,7 @@
         <p>2 700 ₽</p>
     </div>
     <div class="catalog_btn_container">
-        <a href="catalog.html" class="btn_bg">ПЕРЕЙТИ В КАТАЛОГ</a>
+        <a href="./?page=catalog" class="btn_bg">ПЕРЕЙТИ В КАТАЛОГ</a>
     </div>
 </div>
 <!-- POPULAR PRODUCTS END -->

@@ -36,7 +36,7 @@ $users = $stmt->fetchAll();
                     <?php foreach ($users as $user): ?>
                     <td><?=$user['id'] ?></td>
                     <td><?=$user['surname'] . " " . $user['username'] ?></td>
-                    <td><?=$user['email'] ?>/td>
+                    <td><?=$user['email'] ?></td>
                     <td><?=$user['phone'] ?></td>
                     <td><span class="admin-status-badge admin-status-new">Активен</span></td>
                     <td>
@@ -48,6 +48,35 @@ $users = $stmt->fetchAll();
 
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile user cards -->
+        <div class="admin-user-cards">
+            <?php foreach ($users as $user): ?>
+            <div class="admin-user-card">
+                <div class="admin-user-card-header">
+                    <span class="admin-user-id">ID: <?=$user['id'] ?></span>
+                    <span class="admin-user-status admin-status-badge admin-status-new">Активен</span>
+                </div>
+                <div class="admin-user-info">
+                    <div class="admin-user-info-item">
+                        <span class="admin-user-info-label">Имя:</span>
+                        <?=$user['surname'] . " " . $user['username'] ?>
+                    </div>
+                    <div class="admin-user-info-item">
+                        <span class="admin-user-info-label">Email:</span>
+                        <?=$user['email'] ?>
+                    </div>
+                    <div class="admin-user-info-item">
+                        <span class="admin-user-info-label">Телефон:</span>
+                        <?=$user['phone'] ?>
+                    </div>
+                </div>
+                <div class="admin-user-actions">
+                    <button class="admin-btn admin-btn-danger">Заблокировать</button>
+                </div>
+            </div>
+            <?php endforeach; ?>
         </div>
     </main>
 </div>

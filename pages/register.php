@@ -34,7 +34,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = ("INSERT INTO users (surname, username, patronymic, email, password) VALUES (?, ?, ?, ?, ?)");
         $stmt = $database->prepare($sql);
         $stmt->execute([$surname, $username, $patronymic, $email, $password]);
-        header('Location: ./');
+        header('Location: ./?page=login');
     }
 }
 

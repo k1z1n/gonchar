@@ -13,7 +13,7 @@
         <div class="admin-header">
             <h2 class="admin-page-title">Управление товарами</h2>
             <div>
-                <button class="btn_bg" onclick="window.location.href='admin_add_product.html'">Добавить товар</button>
+                <button class="btn_bg" onclick="window.location.href='./?page=admin_add_product'">Добавить товар</button>
                 <a href="?exit">Выйти</a>
             </div>
         </div>
@@ -41,44 +41,8 @@
                         <td>1,200₽</td>
                         <td>12 шт.</td>
                         <td>
-                            <button class="admin-btn admin-btn-secondary edit-product" data-id="1">Редактировать</button>
-                            <button class="admin-btn admin-btn-danger">Удалить</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><img src="assets/media/images/index/product2-1dad5f.png" alt="Товар" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
-                        <td>Ваза "Осенний лес"</td>
-                        <td>Вазы</td>
-                        <td>2,500₽</td>
-                        <td>5 шт.</td>
-                        <td>
-                            <button class="admin-btn admin-btn-secondary edit-product" data-id="2">Редактировать</button>
-                            <button class="admin-btn admin-btn-danger">Удалить</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><img src="assets/media/images/index/product3.png" alt="Товар" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
-                        <td>Чашка "Утро"</td>
-                        <td>Чашки</td>
-                        <td>800₽</td>
-                        <td>20 шт.</td>
-                        <td>
-                            <button class="admin-btn admin-btn-secondary edit-product" data-id="3">Редактировать</button>
-                            <button class="admin-btn admin-btn-danger">Удалить</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td><img src="assets/media/images/index/product1-1e853d.png" alt="Товар" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
-                        <td>Блюдо "Розы"</td>
-                        <td>Тарелки</td>
-                        <td>1,500₽</td>
-                        <td>8 шт.</td>
-                        <td>
-                            <button class="admin-btn admin-btn-secondary edit-product" data-id="4">Редактировать</button>
-                            <button class="admin-btn admin-btn-danger">Удалить</button>
+                            <a href="./?page=admin_edit_product&&id" class="admin-btn admin-btn-secondary edit-product">Редактировать</a>
+                            <a href="./?page=admin_delete_product&&id" class="admin-btn admin-btn-danger">Удалить</a>
                         </td>
                     </tr>
                     </tbody>
