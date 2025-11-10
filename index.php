@@ -1,11 +1,23 @@
 <?php
 
+    $allPages = ['main', 'register', 'login', 'profile', 'catalog', 'product', 'cart', 'admin_users', 'admin_products', 'admin_orders', 'orders_item', 'admin_add_product', 'admin_edit_product', 'admin_categories', 'admin_add_category', 'admin_edit_category', 'admin_delete_category', 'get_characteristics', 'save_product', 'update_product', 'admin_delete_product', 'user_orders'];
+
+$page = $_GET['page'] ?? 'main';
+
+// Проверяем, нужен ли только JSON (без HTML обертки)
+$jsonOnlyPages = ['get_characteristics', 'save_product', 'update_product'];
+
+if (in_array($page, $jsonOnlyPages)) {
+    // Для этих страниц не выводим header/footer - только JSON
+    include("pages/" . "$page" . ".php");
+    exit;
+}
+
+// Для обычных страниц выводим HTML
 include_once("database/connect.php");
 include_once("includes/head.php");
 
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -22,22 +34,6 @@ include_once("includes/head.php");
     <?php
 
     include("includes/header.php");
-
-    $allPages = ['main', 'register', 'login', 'profile', 'catalog', 'product', 'admin_users', 'admin_products', 'admin_add_product', 'admin_edit_product', 'admin_categories', 'admin_add_category', 'admin_edit_category'];
-
-    $page = $_GET['page'] ?? 'main';
-
-    // $mass = [
-    //     'main' => 'dsda',
-    //     'login' => 'dsda',
-    // ];
-    // if (in_array($page, $mass)) {
-    //     die($mass[$page]);
-    // }
-    // if (isset($mass[$page])) {
-    //     echo $mass[$page];
-    // }
-
 
     if (in_array($page, $allPages)) {
         include("pages/" . "$page" . ".php");

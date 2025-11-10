@@ -1873,6 +1873,15 @@ h1 {
   background-color: white;
 }
 
+/* Admin Delete Product */
+.delete-product-card { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.delete-product-thumb { width: 100%; max-width: 320px; height: auto; border-radius: 8px; }
+.delete-product-meta { display: grid; gap: 8px; }
+.delete-field { display: grid; gap: 4px; }
+.delete-field-label { color: #666; font-size: 14px; background: transparent; }
+.delete-warning { margin-top: 24px; padding: 16px; border: 1px solid #f2c5c5; background: #fff6f6; border-radius: 8px; }
+.delete-actions { margin-top: 24px; display: flex; gap: 12px; }
+
 /* Admin Tabs */
 .admin-tabs {
   display: flex;
@@ -1992,6 +2001,97 @@ h1 {
   background-color: #6E1A00;
   opacity: 0.5;
   margin: 20px 0;
+}
+
+/* ORDER DETAILS PAGE */
+.order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.order-info-section {
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.order-info-section h3 {
+  font-family: "VHS";
+  font-size: 24px;
+  color: var(--accent-color);
+  margin-bottom: 25px;
+  background-color: white;
+}
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+    background: transparent;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background-color: rgba(110, 26, 0, 0.03);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  background-color: rgba(110, 26, 0, 0.06);
+  transform: translateX(5px);
+}
+
+.info-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(110, 26, 0, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: transparent;
+}
+
+.info-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent-color);
+  background-color: transparent;
+}
+
+.order-items-section {
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.order-items-section h3 {
+  font-family: "VHS";
+  font-size: 24px;
+  color: var(--accent-color);
+  margin-bottom: 25px;
+  background-color: white;
+}
+
+.admin-header a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.admin-header a:hover {
+  background-color: rgba(110, 26, 0, 0.1);
+  text-decoration: underline;
 }
 
 /* ORDERS END */
@@ -2155,6 +2255,17 @@ h1 {
   }
   .product_item img {
     height: 220px;
+  }
+
+  /* Order details on tablet */
+  .order-info-section,
+  .order-items-section {
+    padding: 25px;
+  }
+
+  .order-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+      background: transparent;
   }
 
   /* Studio */
@@ -3023,6 +3134,45 @@ h1 {
     text-align: center;
   }
 
+  /* Order details on mobile */
+  .order-details {
+    gap: 25px;
+  }
+
+  .order-info-section,
+  .order-items-section {
+    padding: 20px;
+  }
+
+  .order-info-section h3,
+  .order-items-section h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .order-info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+      background: transparent;
+  }
+
+  .info-item {
+    padding: 12px;
+  }
+
+  .info-label {
+    font-size: 12px;
+  }
+
+  .info-value {
+    font-size: 16px;
+  }
+
+  .admin-header a {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
   /* Studio */
   .studio_section {
     grid-template-columns: 1fr;
@@ -3071,3 +3221,75 @@ h1 {
     font-size: 14px;
   }
 }
+
+.order_form {
+  background-color: #F0E6DC;
+  border: 1px solid #6E1A00;
+  padding: 40px;
+  position: sticky;
+  top: 120px;
+}
+
+.delivery_form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.delivery_option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delivery_option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #6E1A00;
+}
+
+.delivery_address_field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin-left: 28px;
+}
+
+.delivery_address_field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6E1A00;
+}
+
+.delivery_address_field input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #6E1A00;
+  background: transparent;
+  font-size: 14px;
+  color: #6E1A00;
+}
+
+.delivery_form .btn_bg {
+  margin-top: 10px;
+}
+
++.delivery_address_input.input_error {
++  border-color: #b3261e;
++  box-shadow: 0 0 0 1px rgba(179, 38, 30, 0.2);
++}
++
++.field_error {
++  font-size: 12px;
++  color: #b3261e;
++}
++
++.order_error {
++  margin: 10px 0;
++  font-size: 14px;
++  color: #b3261e;
++}

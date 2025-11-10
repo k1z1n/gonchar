@@ -3,7 +3,7 @@
 $sql = "SELECT * FROM users";
 $stmt = $database->prepare($sql);
 $stmt->execute();
-$users = $stmt->fetchAll();
+$users = $stmt->fetchAll(2);
 
 
 ?>
@@ -32,8 +32,8 @@ $users = $stmt->fetchAll();
                 </tr>
                 </thead>
                 <tbody>
+                <?php foreach ($users as $user): ?>
                 <tr>
-                    <?php foreach ($users as $user): ?>
                     <td><?=$user['id'] ?></td>
                     <td><?=$user['surname'] . " " . $user['username'] ?></td>
                     <td><?=$user['email'] ?></td>
@@ -42,9 +42,8 @@ $users = $stmt->fetchAll();
                     <td>
                         <button class="admin-btn admin-btn-danger">Заблокировать</button>
                     </td>
-                    <?php endforeach; ?>
                 </tr>
-
+                <?php endforeach; ?>
 
                 </tbody>
             </table>

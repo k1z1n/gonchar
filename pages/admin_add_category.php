@@ -1,5 +1,33 @@
 <?php
 
+$errors = [];
+
+$sql = "SELECT * FROM category";
+$stmt = $database->prepare($sql);
+$stmt->execute();
+$categories = $stmt->fetchAll(2);
+
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name_category = $_POST['name_category'];
+
+    if(empty($name_category)) {
+        $errors[] = 'Заполните название категории';
+    }
+    foreach ($categories as $category) {
+        if($name_category == $category['title']) {
+            $errors[] = 'Данная категория уже существует';
+        }
+    }
+    if(empty($errors)) {
+        $sql = "INSERT INTO category (title) VALUES (?)";
+        $stmt = $database->prepare($sql);
+        $stmt->execute([$name_category]);
+        header('Location: ./?page=admin_categories');
+
+    }
+
+}
+
 ?>
 
 
@@ -15,14 +43,17 @@
         </div>
 
         <div class="admin-form-container">
-            <form id="categoryForm">
+            <form id="categoryForm" method="post">
                 <div class="admin-form-group">
                     <label for="categoryName">Название категории</label>
-                    <input type="text" id="categoryName" required>
+                    <input type="text" id="categoryName" name="name_category" >
                 </div>
-                <div class="admin-form-group">
-                    <label for="categoryDescription">Описание</label>
-                    <textarea id="categoryDescription"></textarea>
+                <div>
+                    <?php if(!empty($errors)): ?>
+                        <?php foreach($errors as $error): ?>
+                            <p><?=$error ?></p>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="admin-form-actions">
                     <a href="./?page=admin_categories" class="admin-btn admin-btn-secondary">Отмена</a>

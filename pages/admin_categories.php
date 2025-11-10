@@ -1,5 +1,10 @@
 <?php
 
+$sql = "SELECT * FROM category";
+$stmt = $database->prepare($sql);
+$stmt->execute();
+$categories = $stmt->fetchAll(2);
+
 
 ?>
 
@@ -24,22 +29,25 @@
                     <tr>
                         <th>ID</th>
                         <th>Название</th>
-                        <th>Описание</th>
+<!--                        <th>Описание</th>-->
                         <th>Количество товаров</th>
                         <th>Действия</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Тарелки</td>
-                        <td>Керамические тарелки различных размеров</td>
-                        <td>24</td>
+
+                        <?php foreach($categories as $category): ?>
+                        <tr>
+                        <td><?=$category['id'] ?></td>
+                        <td><?=$category['title'] ?></td>
+<!--                        <td>Керамические тарелки различных размеров</td>-->
+                        <td><?=$category['count'] ?></td>
                         <td>
-                            <a href="./?page=admin_edit_category&&id" class="admin-btn admin-btn-secondary edit-category">Редактировать</a>
-                            <a href="./?page=admin_delete_category&&id" class="admin-btn admin-btn-danger">Удалить</a>
+                            <a href="./?page=admin_edit_category&&id=<?=$category['id'] ?>" class="admin-btn admin-btn-secondary edit-category">Редактировать</a>
+                            <a href="./?page=admin_delete_category&&id=<?=$category['id'] ?>" class="admin-btn admin-btn-danger">Удалить</a>
                         </td>
-                    </tr>
+                        </tr>
+                        <?php endforeach; ?>
 
                     </tbody>
                 </table>

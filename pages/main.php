@@ -1,3 +1,18 @@
+<?php
+
+$sql_products = "SELECT * FROM products";
+$stmt_products = $database->prepare($sql_products);
+$stmt_products->execute();
+$products = $stmt_products->fetchAll(2);
+
+
+
+?>
+
+
+
+
+
 <!-- BANNER START -->
 <section id="about" class="banner container mt-105">
     <!-- Фоновые изображения -->
@@ -89,26 +104,21 @@
 
 <!-- POPULAR PRODUCTS START -->
 <div class="popular_products container">
+    <?php foreach ($products as $product): ?>
+        <?php
+            $sql_image = "SELECT path FROM images WHERE product_id = ? ORDER BY id ASC LIMIT 1";
+            $stmt_image = $database->prepare($sql_image);
+            $stmt_image->execute([$product['id']]);
+            $image = $stmt_image->fetch(2);
+        ?>
+
     <div class="product_item">
-        <img src="assets/media/images/index/product1-1e853d.png" alt="Васильковое поле">
-        <h3>ВАСИЛЬКОВОЕ ПОЛЕ</h3>
-        <p>2 700 ₽</p>
+        <img src="<?=$image['path'] ?>" alt="Васильковое поле">
+        <h3><?=$product['title'] ?></h3>
+        <p><?=$product['price'] ?> ₽</p>
     </div>
-    <div class="product_item">
-        <img src="assets/media/images/index/product2-1dad5f.png" alt="Васильковое поле">
-        <h3>ВАСИЛЬКОВОЕ ПОЛЕ</h3>
-        <p>2 700 ₽</p>
-    </div>
-    <div class="product_item">
-        <img src="assets/media/images/index/product3.png" alt="Васильковое поле">
-        <h3>ВАСИЛЬКОВОЕ ПОЛЕ</h3>
-        <p>2 700 ₽</p>
-    </div>
-    <div class="product_item">
-        <img src="assets/media/images/index/product3.png" alt="Васильковое поле">
-        <h3>ВАСИЛЬКОВОЕ ПОЛЕ</h3>
-        <p>2 700 ₽</p>
-    </div>
+    <?php endforeach; ?>
+
     <div class="catalog_btn_container">
         <a href="./?page=catalog" class="btn_bg">ПЕРЕЙТИ В КАТАЛОГ</a>
     </div>

@@ -15,10 +15,11 @@
             <img src="assets/media/images/index/icon1.svg" alt="">
             <?php if (isset($_SESSION['user_id'])): ?>
                 <a href="./?page=profile"><img src="assets/media/images/index/profile.svg" alt=""></a>
+                <a href="./?page=cart"><img src="assets/media/images/index/basket.svg" alt=""></a>
             <?php else: ?>
-                <a href="./?page=register"><img src="assets/media/images/index/profile.svg" alt=""></a>
+                <a href="./?page=login"><img src="assets/media/images/index/profile.svg" alt=""></a>
             <?php endif; ?>
-            <img src="assets/media/images/index/basket.svg" alt="">
+
             <button class="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
                 <span></span>
                 <span></span>
