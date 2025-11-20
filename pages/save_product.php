@@ -68,6 +68,16 @@ try {
     $stmt->execute([$title, $categoryId, $price, $description, $stock, $article]);
     $productId = $database->lastInsertId();
 
+    // 1.1. Пересчитываем количество товаров в категории
+    $sql = "SELECT COALESCE(SUM(count), 0) FROM products WHERE category_id = ?";
+    $stmt = $database->prepare($sql);
+    $stmt->execute([$categoryId]);
+    $categoryTotal = (int)$stmt->fetchColumn();
+
+    $sql = "UPDATE category SET count = ? WHERE id = ?";
+    $stmt = $database->prepare($sql);
+    $stmt->execute([$categoryTotal, $categoryId]);
+
     // 2. Сохраняем характеристики товара
     if (isset($_POST['characteristic']) && is_array($_POST['characteristic'])) {
         $sql = "INSERT INTO product_characteristics (product_id, characteristic_id, value) VALUES (?, ?, ?)";

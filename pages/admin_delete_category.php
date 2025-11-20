@@ -1,5 +1,11 @@
 <?php
 
+if(isset($_SESSION['user_id'])) {
+    if($USER['role'] !== 'admin') {
+        header('Location: ./?page=login');
+    }
+}
+
 $errors = [];
 
 if(isset($_GET['id']) && !empty($_GET['id'])) {
@@ -58,13 +64,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <?php endif; ?>
                 </div>
 
-                <div>
-                    <?php if(!empty($errors)): ?>
+                <?php if(!empty($errors)): ?>
+                    <div class="errors-container">
                         <?php foreach($errors as $error): ?>
-                            <p <?=$error ?> </p>
+                            <p><?=$error ?></p>
                         <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
 
                 <div class="admin-form-actions">
                     <a href="./?page=admin_categories" class="admin-btn admin-btn-secondary">Отмена</a>

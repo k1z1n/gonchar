@@ -48,17 +48,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <img src="assets/media/images/register/img.svg" alt="">
     <form method="post" class="avtoreg_form container">
         <h1>РЕГИСТРАЦИЯ</h1>
-        <div>
-            <?php if(!empty($errors)): ?>
+        <?php if(!empty($errors)): ?>
+            <div class="errors-container">
                 <?php foreach($errors as $error): ?>
                     <p><?=$error ?></p>
                 <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-        <input type="text" placeholder="Фамилия*" name="surname">
-        <input type="text" placeholder="Имя*" name="username">
-        <input type="text" placeholder="Отчество" name="patronymic">
-        <input type="email" id="" placeholder="E-mail*" name="email">
+            </div>
+        <?php endif; ?>
+        <input type="text" placeholder="Фамилия*" name="surname" value="<?=$_POST['surname'] ?? ''?>">
+        <input type="text" placeholder="Имя*" name="username" value="<?=$_POST['username'] ?? ''?>">
+        <input type="text" placeholder="Отчество" name="patronymic" value="<?=$_POST['patronymic'] ?? ''?>">
+        <input type="email" id="" placeholder="E-mail*" name="email" value="<?=$_POST['email'] ?? ''?>">
         <input type="password" id="" placeholder="Придумайте пароль*" name="password">
         <input type="password" id="" placeholder="Повторите пароль*" name="re_password">
         <p>Нажимая кнопку «Регистрация», вы даете согласие на обработку ваших персональных данных в соответствии с

@@ -1,4 +1,11 @@
 <?php
+
+if(isset($_SESSION['user_id'])) {
+    if($USER['role'] !== 'admin') {
+        header('Location: ./?page=login');
+    }
+}
+
 $sql_categories = "SELECT * FROM category";
 $stmt_categories = $database->prepare($sql_categories);
 $stmt_categories->execute();
@@ -6,7 +13,7 @@ $categories = $stmt_categories->fetchAll();
 ?>
 
 <div class="admin-container container">
-    <?php include('./includes/admin_menu.php');?>
+    <?php include('./includes/admin_menu.php'); ?>
 
     <main class="admin-main-content">
         <div class="admin-header">
@@ -17,7 +24,7 @@ $categories = $stmt_categories->fetchAll();
         <div class="admin-form-container">
             <form id="productForm" method="post" action="?page=save_product" enctype="multipart/form-data">
                 <!-- Сообщения об ошибках -->
-                <div id="errorContainer" style="display: none; padding: 15px; margin-bottom: 20px; background-color: #fee; border: 1px solid #fcc; border-radius: 4px; color: #c33;">
+                <div id="errorContainer" class="errors-container" style="display: none;">
                     <strong>Ошибка:</strong>
                     <span id="errorText"></span>
                 </div>
@@ -38,7 +45,7 @@ $categories = $stmt_categories->fetchAll();
                     <select id="productCategory" name="category_id" required>
                         <option value="">Выберите категорию</option>
                         <?php foreach ($categories as $category) : ?>
-                            <option value="<?=$category['id']?>"><?=htmlspecialchars($category['title'])?></option>
+                            <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['title']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -94,7 +101,9 @@ $categories = $stmt_categories->fetchAll();
         errorText.textContent = message;
         errorContainer.style.display = 'block';
         successContainer.style.display = 'none';
-        errorContainer.scrollIntoView({ behavior: 'smooth' });
+        errorContainer.scrollIntoView({
+            behavior: 'smooth'
+        });
     }
 
     // Показать успех
@@ -102,7 +111,9 @@ $categories = $stmt_categories->fetchAll();
         successMessage.textContent = message;
         successContainer.style.display = 'block';
         errorContainer.style.display = 'none';
-        successContainer.scrollIntoView({ behavior: 'smooth' });
+        successContainer.scrollIntoView({
+            behavior: 'smooth'
+        });
     }
 
     // Скрыть сообщения
@@ -189,9 +200,9 @@ $categories = $stmt_categories->fetchAll();
         const formData = new FormData(this);
 
         fetch('?page=save_product', {
-            method: 'POST',
-            body: formData
-        })
+                method: 'POST',
+                body: formData
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {

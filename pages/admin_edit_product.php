@@ -1,4 +1,11 @@
 <?php
+
+if(isset($_SESSION['user_id'])) {
+    if($USER['role'] !== 'admin') {
+        header('Location: ./?page=login');
+    }
+}
+
 $productId = $_GET['id'] ?? 0;
 
 if (!$productId) {
@@ -46,9 +53,9 @@ $currentCategoryId = $product['category_id'];
                 <input type="hidden" name="product_id" value="<?=$productId?>">
 
                 <!-- Сообщения -->
-                <div id="errorContainer" style="display: none; padding: 15px; margin-bottom: 20px; background-color: #fee; border: 1px solid #fcc; border-radius: 4px; color: #c33;">
+                <div id="errorContainer" class="errors-container" style="display: none;">
                     <strong>Ошибки:</strong>
-                    <ul id="errorList" style="margin: 10px 0 0 0; padding-left: 20px;"></ul>
+                    <ul id="errorList"></ul>
                 </div>
 
                 <div id="successContainer" style="display: none; padding: 15px; margin-bottom: 20px; background-color: #efe; border: 1px solid #cfc; border-radius: 4px; color: #3c3;">

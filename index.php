@@ -1,6 +1,6 @@
 <?php
 
-    $allPages = ['main', 'register', 'login', 'profile', 'catalog', 'product', 'cart', 'admin_users', 'admin_products', 'admin_orders', 'orders_item', 'admin_add_product', 'admin_edit_product', 'admin_categories', 'admin_add_category', 'admin_edit_category', 'admin_delete_category', 'get_characteristics', 'save_product', 'update_product', 'admin_delete_product', 'user_orders'];
+    $allPages = ['main', 'register', 'login', 'profile', 'catalog', 'product', 'cart', 'user_orders', 'orders_item', 'admin_statistics', 'admin_users', 'admin_products', 'admin_add_product', 'admin_edit_product', 'admin_categories', 'admin_add_category', 'admin_edit_category', 'admin_delete_category', 'admin_orders', 'admin_masterclass_requests', 'admin_masterclass_request_edit', 'get_characteristics', 'save_product', 'update_product', 'admin_delete_product', 'masterclass_request'];
 
 $page = $_GET['page'] ?? 'main';
 

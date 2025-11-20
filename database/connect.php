@@ -1,9 +1,9 @@
 <?php
 
 $host = 'localhost';
-$dbname = 'goncharok';
-$username = 'root';
-$password = '';
+$dbname = 'k1z1nksb_gonchar';
+$username = 'k1z1nksb_gonchar';
+$password = 'DoCCbyE%UD0n';
 
 
 try {

@@ -1,6 +1,6 @@
 <?php
 
-$sql_products = "SELECT * FROM products";
+$sql_products = "SELECT * FROM products ORDER BY RAND() LIMIT 4";
 $stmt_products = $database->prepare($sql_products);
 $stmt_products->execute();
 $products = $stmt_products->fetchAll(2);
@@ -32,10 +32,45 @@ $products = $stmt_products->fetchAll(2);
             <span class="title_line3">ГОНЧАРОК</span>
         </h1>
         <p class="banner_subtitle">ШКОЛА КЕРАМИКИ И ГОНЧАРНОГО МАСТЕРСТВА</p>
-        <button class="btn_bg">ЗАПИСАТЬСЯ</button>
+        <button class="btn_bg" id="bannerMasterclassBtn" type="button">ЗАПИСАТЬСЯ</button>
     </div>
 </section>
 <!-- BANNER END -->
+
+<!-- MASTERCLASS MODAL START -->
+<div class="modal_backdrop" id="masterclassModal" aria-hidden="true">
+    <div class="modal_overlay" data-close="modal"></div>
+    <div class="modal_dialog" role="dialog" aria-modal="true" aria-labelledby="masterclassModalTitle">
+        <button class="modal_close" type="button" aria-label="Закрыть" data-close="modal">&times;</button>
+        <h3 id="masterclassModalTitle">Запись на мастер-класс</h3>
+        <p>Оставьте контакты, и мы свяжемся, чтобы уточнить детали записи.</p>
+        <form id="masterclassForm">
+            <input type="hidden" name="action" value="masterclass_request">
+            <div class="form_group">
+                <label for="modalFullName">ФИО *</label>
+                <input type="text" id="modalFullName" name="full_name" placeholder="Иванов Иван Иванович" required>
+            </div>
+            <div class="form_group">
+                <label for="modalPhone">Телефон *</label>
+                <input type="tel" id="modalPhone" name="phone" placeholder="+7 (999) 000-00-00" inputmode="tel" required>
+            </div>
+            <div class="form_group">
+                <label for="modalCallTime">Когда вам удобнее принять звонок? *</label>
+                <select id="modalCallTime" name="call_time" required>
+                    <option value="" disabled selected>Выберите интервал</option>
+                    <option value="10:00-12:00">10:00–12:00</option>
+                    <option value="12:00-15:00">12:00–15:00</option>
+                    <option value="15:00-18:00">15:00–18:00</option>
+                    <option value="18:00-21:00">18:00–21:00</option>
+                    <option value="В любое время">В любое время</option>
+                </select>
+            </div>
+            <button class="btn_bg" type="submit" id="masterclassSubmitBtn">ОТПРАВИТЬ ЗАЯВКУ</button>
+            <div class="modal_feedback" id="masterclassFeedback" aria-live="polite"></div>
+        </form>
+    </div>
+</div>
+<!-- MASTERCLASS MODAL END -->
 
 <div id="masterclasses" class="h2_title container mt-105">
     <h2>Мастер классы</h2>
@@ -115,7 +150,7 @@ $products = $stmt_products->fetchAll(2);
     <div class="product_item">
         <img src="<?=$image['path'] ?>" alt="Васильковое поле">
         <h3><?=$product['title'] ?></h3>
-        <p><?=$product['price'] ?> ₽</p>
+        <p><?= number_format($product['price'], 0, ',', ' ') ?> ₽</p>
     </div>
     <?php endforeach; ?>
 
@@ -197,7 +232,6 @@ $products = $stmt_products->fetchAll(2);
 
 
 <script>
-    // FAQ Accordion functionality
     document.addEventListener('DOMContentLoaded', function() {
         const faqItems = document.querySelectorAll('.faq_item');
 
@@ -205,16 +239,108 @@ $products = $stmt_products->fetchAll(2);
             const question = item.querySelector('.faq_question');
 
             question.addEventListener('click', function() {
-                // Remove active class from all items
                 faqItems.forEach(otherItem => {
                     if (otherItem !== item) {
                         otherItem.classList.remove('active');
                     }
                 });
 
-                // Toggle active class on clicked item
                 item.classList.toggle('active');
             });
+        });
+
+        const body = document.body;
+        const masterclassModal = document.getElementById('masterclassModal');
+        const openMasterclassBtn = document.getElementById('bannerMasterclassBtn');
+        const masterclassForm = document.getElementById('masterclassForm');
+        const masterclassFeedback = document.getElementById('masterclassFeedback');
+        const masterclassSubmitBtn = document.getElementById('masterclassSubmitBtn');
+
+        const closeTargets = masterclassModal ? masterclassModal.querySelectorAll('[data-close="modal"]') : [];
+
+        const lockScroll = () => body.classList.add('modal-open');
+        const unlockScroll = () => body.classList.remove('modal-open');
+
+        const openModal = () => {
+            if (!masterclassModal) return;
+            masterclassModal.classList.add('is-visible');
+            lockScroll();
+            if (masterclassFeedback) {
+                masterclassFeedback.textContent = '';
+                masterclassFeedback.classList.remove('is-error', 'is-success');
+            }
+        };
+
+        const closeModal = () => {
+            if (!masterclassModal) return;
+            masterclassModal.classList.remove('is-visible');
+            unlockScroll();
+        };
+
+        openMasterclassBtn?.addEventListener('click', openModal);
+        closeTargets.forEach(el => el.addEventListener('click', closeModal));
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && masterclassModal?.classList.contains('is-visible')) {
+                closeModal();
+            }
+        });
+
+        masterclassForm?.addEventListener('submit', async event => {
+            event.preventDefault();
+
+            if (!masterclassForm.checkValidity()) {
+                masterclassForm.reportValidity();
+                return;
+            }
+
+            const formData = new FormData(masterclassForm);
+
+            if (masterclassSubmitBtn) {
+                masterclassSubmitBtn.disabled = true;
+                masterclassSubmitBtn.textContent = 'ОТПРАВЛЯЕМ...';
+            }
+
+            if (masterclassFeedback) {
+                masterclassFeedback.textContent = '';
+                masterclassFeedback.classList.remove('is-error', 'is-success');
+            }
+
+            try {
+                const response = await fetch('?page=masterclass_request', {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    masterclassFeedback.textContent = data.message || 'Заявка успешно отправлена!';
+                    masterclassFeedback.classList.add('is-success');
+                    masterclassFeedback.classList.remove('is-error');
+                    masterclassForm.reset();
+                    setTimeout(closeModal, 1800);
+                } else {
+                    const message = data.errors ? Object.values(data.errors).join('. ') : (data.message || 'Не удалось отправить заявку.');
+                    masterclassFeedback.textContent = message;
+                    masterclassFeedback.classList.add('is-error');
+                    masterclassFeedback.classList.remove('is-success');
+                }
+            } catch (error) {
+                if (masterclassFeedback) {
+                    masterclassFeedback.textContent = 'Произошла ошибка. Попробуйте ещё раз позже.';
+                    masterclassFeedback.classList.add('is-error');
+                    masterclassFeedback.classList.remove('is-success');
+                }
+            } finally {
+                if (masterclassSubmitBtn) {
+                    masterclassSubmitBtn.disabled = false;
+                    masterclassSubmitBtn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ';
+                }
+            }
         });
     });
 </script>

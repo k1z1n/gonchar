@@ -16,13 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $database->prepare($sql);
     $stmt->execute([$email]);
     $user = $stmt->fetch(2);
-    var_dump($user);
 
     if (!$user || !password_verify($password, $user["password"])) {
         $errors[] = "Неверный логин или пароль";
+    } elseif ($user['status'] === 1) {
+        $errors[] = "Вы заблокированы.";
     } elseif (empty($errors)) {
         $_SESSION['user_id'] = $user['id'];
-        if($user['role'] == 'admin'){
+        if ($user['role'] == 'admin') {
             header("Location: ./?page=admin_users");
         } else {
             header('Location: ./?page=profile');
@@ -39,13 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <img src="assets/media/images/register/img.svg" alt="">
     <form class="avtoreg_form container" method="post">
         <h1>ВОЙТИ В АККАУНТ</h1>
-        <div>
-            <?php if (!empty($errors)): ?>
+        <?php if (!empty($errors)): ?>
+            <div class="errors-container">
                 <?php foreach ($errors as $error): ?>
                     <p><?= $error ?></p>
                 <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php endif; ?>
         <input type="email" placeholder="E-mail*" name="email">
         <input type="password" placeholder="Введите пароль*" name="password">
         <div class="links_login">

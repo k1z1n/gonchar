@@ -28,8 +28,7 @@
                     <p>+ 7 (939) 348 - 11 - 64</p>
                     <div class="footer_social">
                         <a href=""><img src="assets/media/images/index/vk.svg" alt="VK"></a>
-                        <a href=""><img src="assets/media/images/index/vk.svg" alt="VK"></a>
-                        <a href=""><img src="assets/media/images/index/vk.svg" alt="VK"></a>
+                        <a href=""><img src="assets/media/images/index/ws.svg" alt="WhatsApp"></a>
                     </div>
                 </div>
 

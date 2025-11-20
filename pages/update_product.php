@@ -71,15 +71,18 @@ if (!empty($errors)) {
 }
 
 try {
-    $sql = "SELECT id FROM products WHERE id = ?";
+    // Получаем старые данные товара для обновления количества в категориях
+    $sql = "SELECT category_id, count FROM products WHERE id = ?";
     $stmt = $database->prepare($sql);
     $stmt->execute([$productId]);
-    $existingProduct = $stmt->fetch();
+    $oldProduct = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$existingProduct) {
+    if (!$oldProduct) {
         echo json_encode(['error' => 'Товар не найден']);
         exit;
     }
+
+    $oldCategoryId = (int)$oldProduct['category_id'];
 
     $database->beginTransaction();
 
@@ -87,6 +90,19 @@ try {
     $sql = "UPDATE products SET title = ?, category_id = ?, price = ?, content = ?, count = ? WHERE id = ?";
     $stmt = $database->prepare($sql);
     $stmt->execute([$title, $categoryId, $price, $description, $stock, $productId]);
+
+    // 1.1. Пересчитываем количество товаров в затронутых категориях
+    $categoriesToUpdate = array_unique([$oldCategoryId, $categoryId]);
+    foreach ($categoriesToUpdate as $catId) {
+        $sql = "SELECT COALESCE(SUM(count), 0) FROM products WHERE category_id = ?";
+        $stmt = $database->prepare($sql);
+        $stmt->execute([$catId]);
+        $categoryTotal = (int)$stmt->fetchColumn();
+
+        $sql = "UPDATE category SET count = ? WHERE id = ?";
+        $stmt = $database->prepare($sql);
+        $stmt->execute([$categoryTotal, $catId]);
+    }
 
     // 2. Обновляем характеристики товара
     // Сначала удаляем старые

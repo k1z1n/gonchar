@@ -7,8 +7,8 @@
         <nav id="main-nav">
             <a href="#about">О НАС</a>
             <a href="#masterclasses">МАСТЕРКЛАССЫ</a>
-            <a href="#catalog">КУПИТЬ ИЗДЕЛИЕ</a>
-            <a href="#studio">ЗАКАЗАТЬ ИЗДЕЛИЕ</a>
+            <a href="#catalog">ПОПУЛЯРНЫЕ ТОВАРЫ</a>
+            <a href="./?page=catalog">КАТАЛОГ</a>
             <a href="#faq">FAQ</a>
         </nav>
         <div class="icons_in_header">

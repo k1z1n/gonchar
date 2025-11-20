@@ -20,16 +20,21 @@ $stmt_order = $database->prepare($sql_order);
 $stmt_order->execute([$id]);
 $order = $stmt_order->fetch(2);
 
-$sql_item = "SELECT 
-    o.id as order_id,
-    oi.id as item_id,
-    
-    FROM orders_items oi
-    JOIN orders o ON o.id = oi.order_id
-    WHERE order_id = ?";
-$stmt_item = $database->prepare($sql_item);
-$stmt_item->execute([$order['order_id']]);
-$item = $stmt_item->fetch(2);
+$items = [];
+if ($order) {
+    $sql_item = "SELECT 
+        p.id as product_id,
+        oi.id as order_item_id,
+        p.title,
+        oi.count,
+        oi.price
+        FROM orders_items oi
+        JOIN products p ON p.id = oi.product_id
+        WHERE oi.order_id = ?";
+    $stmt_item = $database->prepare($sql_item);
+    $stmt_item->execute([$order['order_id']]);
+    $items = $stmt_item->fetchAll(2);
+}
 
 
 
@@ -41,10 +46,11 @@ $item = $stmt_item->fetch(2);
 
     <main class="admin-main-content">
         <div class="admin-header">
-            <h2 class="admin-page-title">Заказ #<?=$order['order_id']?></h2>
+            <h2 class="admin-page-title">Заказ #<?=$order['order_id'] ?? 'Не найден'?></h2>
             <a href="?page=admin_orders">← Назад к заказам</a>
         </div>
 
+        <?php if ($order): ?>
         <div class="order-details">
             <div class="order-info-section">
                 <h3>Информация о заказе</h3>
@@ -82,14 +88,20 @@ $item = $stmt_item->fetch(2);
                         </tr>
                         </thead>
                         <tbody>
-
-
-                            <tr>
-                                <td><?=$item['title'] ?? '' ?></td>
-                                <td><?=$item['count'] ?? '0' ?></td>
-                                <td><?=$item['price'] ?? '0' ?>₽</td>
-                                <td><?=$item['price'] * $item['count'] ?>₽</td>
-                            </tr>
+                            <?php if (!empty($items)): ?>
+                                <?php foreach ($items as $item): ?>
+                                <tr>
+                                    <td><?=$item['title'] ?? '' ?></td>
+                                    <td><?=$item['count'] ?? '0' ?></td>
+                                    <td><?= number_format($item['price'] ?? 0, 0, ',', ' ') ?> ₽</td>
+                                    <td><?= number_format(($item['price'] ?? 0) * ($item['count'] ?? 0), 0, ',', ' ') ?> ₽</td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">Товары не найдены</td>
+                                </tr>
+                            <?php endif; ?>
 
 
 
@@ -99,6 +111,11 @@ $item = $stmt_item->fetch(2);
                 </div>
             </div>
         </div>
+        <?php else: ?>
+            <div style="padding: 40px; text-align: center;">
+                <p>Заказ не найден</p>
+            </div>
+        <?php endif; ?>
 
     </main>
 

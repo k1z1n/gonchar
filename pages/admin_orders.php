@@ -1,5 +1,11 @@
 <?php
 
+if(isset($_SESSION['user_id'])) {
+    if($USER['role'] !== 'admin') {
+        header('Location: ./?page=login');
+    }
+}
+
 $sql_orders = "SELECT * FROM orders";
 $stmt_orders = $database->prepare($sql_orders);
 $stmt_orders->execute();
@@ -70,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ?>
                         <td><?=$user['surname'] . $user['username'] ?></td>
                         <td><?=$order['created_at'] ?></td>
-                        <td><?=$order['total_amount'] ?>₽</td>
+                        <td><?= number_format($order['total_amount'], 0, ',', ' ') ?> ₽</td>
                         <td>
                             <select class="status-select" name="status" form="status-form-<?=$order['id'] ?>">
                                 <?php foreach ($statuses as $status_option): ?>
@@ -87,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </form>
                         </td>
                         <td>
-                            <a class="admin-btn admin-btn-primary view-order" href="./?page=orders_item&&id=<?=$order['id'] ?>">Просмотреть заказ</a>
+                            <a class="admin-btn admin-btn-primary view-order" href="./?page=orders_item&&id=<?=$order['id'] ?>">Просмотреть</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
