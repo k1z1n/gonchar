@@ -281,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action === 'order') {
                 'capture' => true,
                 'confirmation' => [
                     'type' => 'redirect',
-                    'return_url' => 'http://goncharok/?page=user_orders',
+                    'return_url' => 'https://gonharok.ru/?page=user_orders',
                 ],
                 'description' => 'Заказ №' . $orderNumber,
             ];
