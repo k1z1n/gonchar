@@ -1,7 +1,7 @@
 <div class="profile_navigation">
     <div class="profile_nav_wrapper">
         <?php if(isset($_SESSION['user_id'])): ?>
-            <?php if($USER['role'] == 'admin'): ?>
+            <?php if($USER['role'] === 'admin'): ?>
                 <a href="./?page=admin_users">ПАНЕЛЬ АДМИНИСТРАТОРА</a>
             <?php endif; ?>
         <?php endif; ?>
