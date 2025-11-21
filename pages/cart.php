@@ -38,12 +38,55 @@ $cart = $stmt->fetchAll(2);
 $cartMessage = $_SESSION['cart_message'] ?? null;
 unset($_SESSION['cart_message']);
 
+$promoMessage = $_SESSION['promo_message'] ?? null;
+$promoError = $_SESSION['promo_error'] ?? null;
+$promoInputValue = $_SESSION['promo_input'] ?? '';
+unset($_SESSION['promo_message'], $_SESSION['promo_error'], $_SESSION['promo_input']);
+$appliedPromoId = $_SESSION['applied_promo_id'] ?? null;
+$appliedPromoCode = $_SESSION['applied_promo_code'] ?? null;
+
 $totalPrice = 0;
 $pickupAddress = 'Казань, ул. Новаторов 8Б';
 $orderError = null;
 $addressInvalid = false;
 
 $action = $_POST["action"] ?? null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($action === 'apply_promo') {
+        $enteredCode = strtoupper(trim($_POST['promo_code'] ?? ''));
+        $_SESSION['promo_input'] = $enteredCode;
+
+        if ($enteredCode === '') {
+            $_SESSION['promo_error'] = 'Введите промокод.';
+        } else {
+            $stmtPromo = $database->prepare("SELECT * FROM promocodes WHERE code = ?");
+            $stmtPromo->execute([$enteredCode]);
+            $promoData = $stmtPromo->fetch(PDO::FETCH_ASSOC);
+
+            if (!$promoData) {
+                $_SESSION['promo_error'] = 'Промокод не найден.';
+            } elseif ((int)$promoData['used_count'] >= (int)$promoData['usage_limit']) {
+                $_SESSION['promo_error'] = 'Лимит использований промокода исчерпан.';
+            } else {
+                $_SESSION['applied_promo_id'] = (int)$promoData['id'];
+                $_SESSION['applied_promo_code'] = $promoData['code'];
+                $_SESSION['promo_message'] = 'Промокод применён. Скидка ' . number_format($promoData['amount'], 0, ',', ' ') . ' ₽.';
+                unset($_SESSION['promo_error'], $_SESSION['promo_input']);
+            }
+        }
+
+        header('Location: ./?page=cart');
+        exit;
+    }
+
+    if ($action === 'remove_promo') {
+        unset($_SESSION['applied_promo_id'], $_SESSION['applied_promo_code'], $_SESSION['promo_input']);
+        $_SESSION['promo_message'] = 'Промокод удалён.';
+        header('Location: ./?page=cart');
+        exit;
+    }
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $action !== 'order') {
 
@@ -112,6 +155,26 @@ $orderAddressDisplay = $orderAddress !== '' ? $orderAddress : '—';
 $orderAddressDisplayEsc = htmlspecialchars($orderAddressDisplay, ENT_QUOTES, 'UTF-8');
 
 $allPrice = $totalPrice + $deliveryPrice;
+$appliedPromo = null;
+$promoDiscount = 0.0;
+
+if ($appliedPromoId) {
+    $stmtAppliedPromo = $database->prepare("SELECT * FROM promocodes WHERE id = ?");
+    $stmtAppliedPromo->execute([$appliedPromoId]);
+    $promoCandidate = $stmtAppliedPromo->fetch(PDO::FETCH_ASSOC);
+
+    if ($promoCandidate && (int)$promoCandidate['used_count'] < (int)$promoCandidate['usage_limit']) {
+        $appliedPromo = $promoCandidate;
+        $appliedPromoCode = $promoCandidate['code'];
+        $promoDiscount = min((float)$promoCandidate['amount'], max(0, $totalPrice + $deliveryPrice));
+        $allPrice = max(0, $allPrice - $promoDiscount);
+    } else {
+        unset($_SESSION['applied_promo_id'], $_SESSION['applied_promo_code']);
+        if (!$promoError) {
+            $promoError = 'Промокод больше недоступен.';
+        }
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action === 'order') {
 
@@ -151,82 +214,107 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action === 'order') {
         }
 
         $orderNumber = generateUniqueOrderNumber($database);
+        $order_id = null;
 
-        $sql = "INSERT INTO orders (user_id, total_amount, order_number, adress) VALUES (?, ?, ?, ?)";
-        $stmt = $database->prepare($sql);
-        $stmt->execute([$_SESSION['user_id'], $allPrice, $orderNumber, $orderAddress]);
+        try {
+            $database->beginTransaction();
 
-        $order_id = $database->lastInsertId();
+            $sql = "INSERT INTO orders (user_id, total_amount, order_number, adress) VALUES (?, ?, ?, ?)";
+            $stmt = $database->prepare($sql);
+            $stmt->execute([$_SESSION['user_id'], $allPrice, $orderNumber, $orderAddress]);
 
-        $stmtInsertOrderItem = $database->prepare("INSERT INTO orders_items (order_id, product_id, count, price) VALUES (?, ?, ?, ?)");
-        $stmtUpdateProduct = $database->prepare("UPDATE products SET count = CASE WHEN count >= ? THEN count - ? ELSE 0 END WHERE id = ?");
-        $stmtGetCategory = $database->prepare("SELECT category_id FROM products WHERE id = ?");
-        $stmtRecalcCategoryTotal = $database->prepare("SELECT COALESCE(SUM(count), 0) FROM products WHERE category_id = ?");
-        $stmtUpdateCategoryCount = $database->prepare("UPDATE category SET count = ? WHERE id = ?");
+            $order_id = (int)$database->lastInsertId();
 
-        $affectedCategories = [];
+            $stmtInsertOrderItem = $database->prepare("INSERT INTO orders_items (order_id, product_id, count, price) VALUES (?, ?, ?, ?)");
+            $stmtUpdateProduct = $database->prepare("UPDATE products SET count = CASE WHEN count >= ? THEN count - ? ELSE 0 END WHERE id = ?");
+            $stmtGetCategory = $database->prepare("SELECT category_id FROM products WHERE id = ?");
+            $stmtRecalcCategoryTotal = $database->prepare("SELECT COALESCE(SUM(count), 0) FROM products WHERE category_id = ?");
+            $stmtUpdateCategoryCount = $database->prepare("UPDATE category SET count = ? WHERE id = ?");
 
-        foreach ($cart as $item) {
-            $stmtInsertOrderItem->execute([$order_id, $item['product_id'], $item['count'], $allPrice]);
+            $affectedCategories = [];
 
-            $stmtGetCategory->execute([$item['product_id']]);
-            $categoryId = (int)$stmtGetCategory->fetchColumn();
-            if ($categoryId) {
-                $affectedCategories[] = $categoryId;
+            foreach ($cart as $item) {
+                $stmtInsertOrderItem->execute([$order_id, $item['product_id'], $item['count'], $allPrice]);
+
+                $stmtGetCategory->execute([$item['product_id']]);
+                $categoryId = (int)$stmtGetCategory->fetchColumn();
+                if ($categoryId) {
+                    $affectedCategories[] = $categoryId;
+                }
+
+                $stmtUpdateProduct->execute([$item['count'], $item['count'], $item['product_id']]);
             }
 
-            $stmtUpdateProduct->execute([$item['count'], $item['count'], $item['product_id']]);
-        }
-
-        $affectedCategories = array_unique($affectedCategories);
-        foreach ($affectedCategories as $categoryId) {
-            $stmtRecalcCategoryTotal->execute([$categoryId]);
-            $categoryTotal = (int)$stmtRecalcCategoryTotal->fetchColumn();
-            $stmtUpdateCategoryCount->execute([$categoryTotal, $categoryId]);
-        }
-
-        $idempotentKey = uniqid('', true);
-
-        $paymentData = [
-            'amount' => [
-                'value' => number_format($allPrice, 2, '.', ''),
-                'currency' => 'RUB',
-            ],
-            'capture' => true,
-            'confirmation' => [
-                'type' => 'redirect',
-                'return_url' => 'http://goncharok/?page=user_orders',
-            ],
-            'description' => 'Заказ №' . $orderNumber,
-        ];
-
-        $url = 'https://api.yookassa.ru/v3/payments';
-
-        $option = [
-            'http' => [
-                'header' => "Content-Type: application/json\r\n" .
-                    "Idempotence-Key: " . $idempotentKey . "\r\n" .
-                    "Authorization: Basic " . base64_encode("1178569:test_gGqTKdTnhxY50boT2OG7BWTTRgFerh_Y669BiH5x1Jg"),
-                'method' => 'POST',
-                'content' => json_encode($paymentData, JSON_UNESCAPED_UNICODE)
-            ]
-        ];
-
-        $context = stream_context_create($option);
-        $result = file_get_contents($url, false, $context);
-
-        if ($result === false) {
-            $orderError = 'Ошибка при создании платежа. Попробуйте позже.';
-        } else {
-            $response = json_decode($result, true);
-
-            foreach ($cart as $cartItem) {
-                $database->query("DELETE FROM carts WHERE id = " . (int)$cartItem['cart_id']);
+            $affectedCategories = array_unique($affectedCategories);
+            foreach ($affectedCategories as $categoryId) {
+                $stmtRecalcCategoryTotal->execute([$categoryId]);
+                $categoryTotal = (int)$stmtRecalcCategoryTotal->fetchColumn();
+                $stmtUpdateCategoryCount->execute([$categoryTotal, $categoryId]);
             }
-            $_SESSION['delivery_address'] = '';
-            $_SESSION['delivery_method'] = 'courier';
-            header('Location: ' . $response['confirmation']['confirmation_url']);
-            exit;
+
+            if ($appliedPromo && $promoDiscount > 0) {
+                $stmtIncrementPromo = $database->prepare("UPDATE promocodes SET used_count = used_count + 1 WHERE id = ? AND used_count < usage_limit");
+                $stmtIncrementPromo->execute([$appliedPromo['id']]);
+
+                if ($stmtIncrementPromo->rowCount() === 0) {
+                    throw new RuntimeException('Промокод больше недоступен.');
+                }
+
+                $stmtPromoUsage = $database->prepare("INSERT INTO promocode_usages (promocode_id, order_id, user_id, discount_amount) VALUES (?, ?, ?, ?)");
+                $stmtPromoUsage->execute([$appliedPromo['id'], $order_id, $_SESSION['user_id'], $promoDiscount]);
+            }
+
+            $database->commit();
+        } catch (Throwable $exception) {
+            $database->rollBack();
+            $orderError = 'Не удалось оформить заказ. ' . $exception->getMessage();
+        }
+
+        if (!$orderError) {
+            $idempotentKey = uniqid('', true);
+
+            $paymentData = [
+                'amount' => [
+                    'value' => number_format($allPrice, 2, '.', ''),
+                    'currency' => 'RUB',
+                ],
+                'capture' => true,
+                'confirmation' => [
+                    'type' => 'redirect',
+                    'return_url' => 'http://goncharok/?page=user_orders',
+                ],
+                'description' => 'Заказ №' . $orderNumber,
+            ];
+
+            $url = 'https://api.yookassa.ru/v3/payments';
+
+            $option = [
+                'http' => [
+                    'header' => "Content-Type: application/json\r\n" .
+                        "Idempotence-Key: " . $idempotentKey . "\r\n" .
+                        "Authorization: Basic " . base64_encode("1178569:test_gGqTKdTnhxY50boT2OG7BWTTRgFerh_Y669BiH5x1Jg"),
+                    'method' => 'POST',
+                    'content' => json_encode($paymentData, JSON_UNESCAPED_UNICODE)
+                ]
+            ];
+
+            $context = stream_context_create($option);
+            $result = file_get_contents($url, false, $context);
+
+            if ($result === false) {
+                $orderError = 'Ошибка при создании платежа. Попробуйте позже.';
+            } else {
+                $response = json_decode($result, true);
+
+                foreach ($cart as $cartItem) {
+                    $database->query("DELETE FROM carts WHERE id = " . (int)$cartItem['cart_id']);
+                }
+                $_SESSION['delivery_address'] = '';
+                $_SESSION['delivery_method'] = 'courier';
+                unset($_SESSION['applied_promo_id'], $_SESSION['applied_promo_code']);
+                header('Location: ' . $response['confirmation']['confirmation_url']);
+                exit;
+            }
         }
     }
 }
@@ -337,12 +425,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action === 'order') {
                     </div>
                     <div class="summary_row">
                         <span>скидка</span>
-                        <span>0 ₽</span>
+                    <span><?= $promoDiscount > 0 ? '- ' . number_format($promoDiscount, 0, ',', ' ') : '0' ?> ₽</span>
                     </div>
                 </div>
 
                 <div class="promo_section">
-                    <input type="text" placeholder="введите промокод">
+                <?php if ($promoMessage): ?>
+                    <div class="promo_status success"><?= htmlspecialchars($promoMessage, ENT_QUOTES, 'UTF-8') ?></div>
+                <?php endif; ?>
+                <?php if ($promoError): ?>
+                    <div class="promo_status error"><?= htmlspecialchars($promoError, ENT_QUOTES, 'UTF-8') ?></div>
+                <?php endif; ?>
+
+                <?php if ($appliedPromo): ?>
+                    <form method="post">
+                        <input type="hidden" name="action" value="remove_promo">
+                        <div class="promo_applied_tag">
+                            <span><?= htmlspecialchars($appliedPromoCode ?? $appliedPromo['code'], ENT_QUOTES, 'UTF-8') ?></span>
+                            <strong>-<?= number_format($promoDiscount, 0, ',', ' ') ?> ₽</strong>
+                        </div>
+                        <button type="submit" class="promo_remove_btn">Удалить</button>
+                    </form>
+                <?php else: ?>
+                    <form method="post">
+                        <input type="hidden" name="action" value="apply_promo">
+                        <input type="text" name="promo_code" placeholder="введите промокод" value="<?= htmlspecialchars($promoInputValue, ENT_QUOTES, 'UTF-8') ?>">
+                        <button type="submit">Применить</button>
+                    </form>
+                <?php endif; ?>
                 </div>
 
                 <div class="summary_total">

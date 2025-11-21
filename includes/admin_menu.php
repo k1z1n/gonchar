@@ -25,6 +25,9 @@
             <a href="./?page=admin_orders" class="admin-nav-link <?=$currentPage === 'admin_orders' ? 'active' : ''?>">Заказы</a>
         </li>
         <li class="admin-nav-item">
+            <a href="./?page=admin_promocodes" class="admin-nav-link <?=$currentPage === 'admin_promocodes' ? 'active' : ''?>">Промокоды</a>
+        </li>
+        <li class="admin-nav-item">
             <?php
             $isRequestsPage = in_array($currentPage, ['admin_masterclass_requests', 'admin_masterclass_request_edit'], true);
             ?>
