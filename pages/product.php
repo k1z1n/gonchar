@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id']) && isset
     $productData = $stmt_product_check->fetch(PDO::FETCH_ASSOC);
 
     if (!$productData) {
-        header('Location: ./?page=product&id=' . $product_id);
+        echo "<script>document.location.href='./?page=product&id=" . $product_id . "';</script>";
         exit;
     }
 
@@ -25,14 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id']) && isset
     if ($availableStock <= 0) {
         // Товара нет в наличии - перенаправляем обратно с сообщением
         $_SESSION['cart_error'] = 'Товар временно отсутствует на складе. Доступное количество: 0 шт.';
-        header('Location: ./?page=product&id=' . $product_id);
+        echo "<script>document.location.href='./?page=product&id=" . $product_id . "';</script>";
         exit;
     }
     
     // Ограничиваем количество доступным на складе
     if ($quantity > $availableStock) {
         $_SESSION['cart_error'] = 'В таком количестве товара нет. Доступное количество: ' . $availableStock . ' шт.';
-        header('Location: ./?page=product&id=' . $product_id);
+        echo "<script>document.location.href='./?page=product&id=" . $product_id . "';</script>";
         exit;
     }
 
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id']) && isset
         // Ограничиваем количеством на складе
         if ($newCount > $availableStock) {
             $_SESSION['cart_error'] = 'В таком количестве товара нет. Доступное количество: ' . $availableStock . ' шт.';
-            header('Location: ./?page=product&id=' . $product_id);
+            echo "<script>document.location.href='./?page=product&id=" . $product_id . "';</script>";
             exit;
         }
 
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id']) && isset
         $stmt_add_cart_count->execute([$newCount, $product_id, $_SESSION['user_id']]);
     }
 
-    header('Location: ./?page=cart');
+    echo "<script>document.location.href='./?page=cart';</script>";
     exit;
 }
 

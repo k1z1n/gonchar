@@ -2,14 +2,14 @@
 
 if(isset($_SESSION['user_id'])) {
     if($USER['role'] !== 'admin') {
-        header('Location: ./?page=login');
+        echo "<script>document.location.href='./?page=login';</script>";
     }
 }
 
 $productId = $_GET['id'] ?? 0;
 
 if (!$productId) {
-    header('Location: ./?page=admin_products');
+    echo "<script>document.location.href='./?page=admin_products';</script>";
     exit;
 }
 
@@ -20,7 +20,7 @@ $stmt->execute([$productId]);
 $product = $stmt->fetch();
 
 if (!$product) {
-    header('Location: ./?page=admin_products');
+    echo "<script>document.location.href='./?page=admin_products';</script>";
     exit;
 }
 

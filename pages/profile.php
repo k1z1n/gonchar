@@ -25,7 +25,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "UPDATE users SET surname = ?, username = ?, patronymic = ?, phone = ? WHERE id = ?";
         $stmt = $database->prepare($sql);
         $stmt->execute([$surname, $username, $patronymic, $phone, $_SESSION['user_id']]);
-        header('Location: ./?page=profile');
+        echo "<script>document.location.href='./?page=profile';</script>";
     }
 
 }

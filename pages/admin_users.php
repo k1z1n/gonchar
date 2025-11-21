@@ -2,7 +2,7 @@
 
 if(isset($_SESSION['user_id'])) {
     if($USER['role'] !== 'admin') {
-        header('Location: ./?page=login');
+        echo "<script>document.location.href='./?page=login';</script>";
     }
 }
 
@@ -21,12 +21,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $userId = $_POST['userId'];
     // Предотвращаем блокировку самого себя
     if(isset($USER['id']) && $userId == $USER['id']){
-        header('Location: ./?page=admin_users' . (!empty($search) ? '&search=' . urlencode($search) : ''));
+        echo "<script>document.location.href='./?page=admin_users" . (!empty($search) ? '&search=' . urlencode($search) : '') . "';</script>";
         exit;
     }
     $stmt = $database->prepare("UPDATE users SET status = 1 - status WHERE id = ?");
     $stmt->execute([$userId]);
-    header('Location: ./?page=admin_users' . (!empty($search) ? '&search=' . urlencode($search) : ''));
+    echo "<script>document.location.href='./?page=admin_users" . (!empty($search) ? '&search=' . urlencode($search) : '') . "';</script>";
     exit;
 }
 

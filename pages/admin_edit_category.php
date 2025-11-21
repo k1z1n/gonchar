@@ -2,7 +2,7 @@
 
 if(isset($_SESSION['user_id'])) {
     if($USER['role'] !== 'admin') {
-        header('Location: ./?page=login');
+        echo "<script>document.location.href='./?page=login';</script>";
     }
 }
 
@@ -41,7 +41,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "UPDATE category SET title = ? WHERE id = ?";
         $stmt = $database->prepare($sql);
         $stmt->execute([$name_category, $id]);
-        header('Location: ./?page=admin_categories');
+        echo "<script>document.location.href='./?page=admin_categories';</script>";
     }
 }
 

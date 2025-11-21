@@ -2,11 +2,11 @@
 
 if (isset($_SESSION['user_id'])) {
     if ($USER['role'] !== 'admin') {
-        header('Location: ./?page=login');
+        echo "<script>document.location.href='./?page=login';</script>";
         exit;
     }
 } else {
-    header('Location: ./?page=login');
+    echo "<script>document.location.href='./?page=login';</script>";
     exit;
 }
 

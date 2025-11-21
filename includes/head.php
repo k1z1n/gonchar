@@ -19,6 +19,6 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id']) && isset($databa
 if (isset($_GET['exit'])) {
     unset($_SESSION['user_id']);
     session_destroy();
-    header('Location: ./');
+    echo "<script>document.location.href='./';</script>";
     exit;
 }

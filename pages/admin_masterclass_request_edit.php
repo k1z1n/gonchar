@@ -2,7 +2,7 @@
 
 if(isset($_SESSION['user_id'])) {
     if($USER['role'] !== 'admin') {
-        header('Location: ./?page=login');
+        echo "<script>document.location.href='./?page=login';</script>";
     }
 }
 
@@ -14,7 +14,7 @@ $statusOptions = [
 $requestId = (int)($_GET['id'] ?? 0);
 
 if ($requestId <= 0) {
-    header('Location: ./?page=admin_masterclass_requests');
+    echo "<script>document.location.href='./?page=admin_masterclass_requests';</script>";
     exit;
 }
 
@@ -23,7 +23,7 @@ $stmt->execute([$requestId]);
 $request = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$request) {
-    header('Location: ./?page=admin_masterclass_requests');
+    echo "<script>document.location.href='./?page=admin_masterclass_requests';</script>";
     exit;
 }
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'delete_request') {
         $deleteStmt = $database->prepare("DELETE FROM masterclass_requests WHERE id = ?");
         $deleteStmt->execute([$requestId]);
-        header('Location: ./?page=admin_masterclass_requests&deleted=1');
+        echo "<script>document.location.href='./?page=admin_masterclass_requests&deleted=1';</script>";
         exit;
     }
 

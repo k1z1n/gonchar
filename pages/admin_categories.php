@@ -2,7 +2,7 @@
 
 if(isset($_SESSION['user_id'])) {
     if($USER['role'] !== 'admin') {
-        header('Location: ./?page=login');
+        echo "<script>document.location.href='./?page=login';</script>";
     }
 }
 
@@ -26,7 +26,7 @@ if (isset($_GET['recalculate']) && $_GET['recalculate'] == '1') {
         $stmt->execute([$categoryTotal, $categoryId]);
     }
     
-    header("Location: ./?page=admin_categories");
+    echo "<script>document.location.href='./?page=admin_categories';</script>";
     exit;
 }
 

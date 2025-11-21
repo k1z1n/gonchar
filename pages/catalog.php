@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['product_id']) && isset
     $productData = $stmt_product->fetch(PDO::FETCH_ASSOC);
 
     if (!$productData || (int)$productData['count'] <= 0) {
-        header('Location: ./?page=cart');
+        echo "<script>document.location.href='./?page=cart';</script>";
         exit;
     }
 
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['product_id']) && isset
         $stmt_add_cart_count->execute([$newCount, $product_id, $_SESSION['user_id']]);
     }
 
-    header('Location: ./?page=cart');
+    echo "<script>document.location.href='./?page=cart';</script>";
     exit;
 }
 

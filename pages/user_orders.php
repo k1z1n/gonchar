@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ./?page=login');
+    echo "<script>document.location.href='./?page=login';</script>";
     exit;
 }
 

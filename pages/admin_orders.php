@@ -2,7 +2,7 @@
 
 if(isset($_SESSION['user_id'])) {
     if($USER['role'] !== 'admin') {
-        header('Location: ./?page=login');
+        echo "<script>document.location.href='./?page=login';</script>";
     }
 }
 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_update->execute([$statusValue, $orderId]);
     }
 
-    header("Location: " . $_SERVER['REQUEST_URI']);
+    echo "<script>document.location.href='" . $_SERVER['REQUEST_URI'] . "';</script>";
     exit;
 }
 

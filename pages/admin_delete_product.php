@@ -2,7 +2,7 @@
 
 if(isset($_SESSION['user_id'])) {
     if($USER['role'] !== 'admin') {
-        header('Location: ./?page=login');
+        echo "<script>document.location.href='./?page=login';</script>";
     }
 }
 
@@ -31,7 +31,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "DELETE FROM products WHERE id = ?";
     $stmt = $database->prepare($sql);
     $stmt->execute([$id]);
-    header("Location: ./?page=admin_products");
+    echo "<script>document.location.href='./?page=admin_products';</script>";
 }
 
 

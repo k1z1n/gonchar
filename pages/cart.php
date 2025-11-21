@@ -17,7 +17,7 @@ function generateUniqueOrderNumber(PDO $database, int $min = 100000, int $max = 
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ./?page=login');
+    echo "<script>document.location.href='./?page=login';</script>";
     exit;
 }
 
@@ -76,14 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        header('Location: ./?page=cart');
+        echo "<script>document.location.href='./?page=cart';</script>";
         exit;
     }
 
     if ($action === 'remove_promo') {
         unset($_SESSION['applied_promo_id'], $_SESSION['applied_promo_code'], $_SESSION['promo_input']);
         $_SESSION['promo_message'] = 'Промокод удалён.';
-        header('Location: ./?page=cart');
+        echo "<script>document.location.href='./?page=cart';</script>";
         exit;
     }
 }
@@ -135,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $action !== 'order') {
         }
     }
 
-    header('Location: ./?page=cart');
+    echo "<script>document.location.href='./?page=cart';</script>";
     exit;
 }
 
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action === 'order') {
                 }
             }
             $_SESSION['cart_message'] = 'Количество некоторых товаров было скорректировано из-за ограниченного остатка.';
-            header('Location: ./?page=cart');
+            echo "<script>document.location.href='./?page=cart';</script>";
             exit;
         }
 
@@ -312,7 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action === 'order') {
                 $_SESSION['delivery_address'] = '';
                 $_SESSION['delivery_method'] = 'courier';
                 unset($_SESSION['applied_promo_id'], $_SESSION['applied_promo_code']);
-                header('Location: ' . $response['confirmation']['confirmation_url']);
+                echo "<script>document.location.href='" . $response['confirmation']['confirmation_url'] . "';</script>";
                 exit;
             }
         }
