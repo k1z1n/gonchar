@@ -40,7 +40,7 @@ $categories = $stmt->fetchAll(2);
 
 <div class="admin-container container">
     <!-- Сайдбар -->
-    <?php include('./includes/admin_menu.php');?> ?>
+    <?php include('./includes/admin_menu.php');?>
 
     <!-- Основной контент -->
     <main class="admin-main-content">

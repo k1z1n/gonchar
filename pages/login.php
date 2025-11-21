@@ -24,9 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (empty($errors)) {
         $_SESSION['user_id'] = $user['id'];
         if ($user['role'] == 'admin') {
-            header("Location: ./?page=admin_users");
+            echo "<script>document.location.href='./?page=admin_users'</script>";
+//            header("Location: ./?page=admin_users");
         } else {
-            header('Location: ./?page=profile');
+            echo "<script>document.location.href='./?page=profile'</script>";
+//            header('Location: ./?page=profile');
         }
     }
 }
