@@ -450,7 +450,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action === 'order') {
                     <form method="post">
                         <input type="hidden" name="action" value="apply_promo">
                         <input type="text" name="promo_code" placeholder="введите промокод" value="<?= htmlspecialchars($promoInputValue, ENT_QUOTES, 'UTF-8') ?>">
-                        <button type="submit">Применить</button>
+                        <button type="submit" class="btn_bg promo_apply_btn">ПРИМЕНИТЬ</button>
                     </form>
                 <?php endif; ?>
                 </div>
@@ -477,7 +477,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action === 'order') {
                         <span>8 800 777-7-777</span>
                     </div>
                     <div class="contact_item">
-                        <img src="assets/media/images/index/email_icon.svg" alt="">
+                        <img src="assets/media/images/index/phone.svg" alt="">
                         <span>goncharok@mail.ru</span>
                     </div>
                 </div>
